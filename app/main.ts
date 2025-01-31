@@ -1,4 +1,4 @@
-import { createInterface } from "readline";
+import { ReadLine, createInterface } from "readline";
 
 const rl = createInterface({
   input: process.stdin,
@@ -7,12 +7,28 @@ const rl = createInterface({
 
 const f = () => {
   rl.question("$ ", (answer: string) => {
-    if (answer == "exit 0") {
-      process.exit()
+    if (answer == 'exit 0') {
+      commands['exit']()
     }
-    rl.write(`${answer}: command not found\n`)
+
+    const args = answer.split(" ");
+    if (commands[args[0]]) {
+      commands[args[0]](rl, answer.substring(5) + '\n')
+    } else {
+      rl.write(`${answer}: command not found\n`)
+    }
     f()
   })
 };
 
 f()
+
+const commands: Command = {
+  'echo': (rl: ReadLine, answer: string) => { rl.write(answer) },
+  "exit": () => process.exit()
+}
+
+//INFO: types
+type Command = {
+  [key: string]: any
+}
