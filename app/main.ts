@@ -1,4 +1,5 @@
 import { ReadLine, createInterface } from "readline";
+import fs from 'fs'
 //🚀
 const rl = createInterface({
   input: process.stdin,
@@ -47,14 +48,7 @@ const handleOtherArgs = (answer: string) => {
   if (args[0] == 'type' && commands[args[1]] && commands[args[1]].isBuiltin) {
     commands[args[1]].value(rl, commands[args[1]].name + ' is a shell builtin\n')
   } else if (args[0] == 'type' && !commands[args[1]]) {
-    //WARNING: !!!!
-    const p = process.env.PATH ?? ""
-    const { realRoute, isInPath } = commandIsInPath(args[1], p)
-    if (isInPath) {
-      rl.write(`${args[1]} is ${realRoute}\n`)
-    } else {
-      rl.write(`${args[1]}: not found\n`)
-    }
+    commandIsInPath(args[1])
   } else if (commands[args[0]]) {
     commands[args[0]].value(rl, answer.substring(5) + '\n')
   } else {
@@ -72,24 +66,26 @@ const handleExit = (answer: string) => {
   }
 }
 
-const commandIsInPath = (command: string, path: string) => {
-  const splited = path.split(':')
-  let isInPath = false
-  let realRoute = null
-  for (const s in splited) {
-    const splitedDir = splited[s].split('/')
-    for (const d in splitedDir) {
-      if (splitedDir[d] == command) {
-        realRoute = splited[s]
-        isInPath = true
-        break
+const commandIsInPath = (command: string) => {
+  let found = false;
+  const paths = process.env.PATH?.split(":");
+  paths?.forEach((path) => {
+    try {
+      const cmds = fs.readdirSync(path).filter((cmd) => cmd === command);
+      if (cmds.length > 0) {
+        found = true;
+        cmds.forEach(() => {
+          rl.write(`${command} is ${path}/${command}\n`);
+        });
       }
+    } catch (error: any) {
     }
+  });
+  if (!found) {
+    rl.write(`${command}: not found\n`);
   }
-  return { isInPath, realRoute }
 }
 
-//INFO: types
 type Command = {
   [key: string]: {
     name: string,
