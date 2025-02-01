@@ -48,7 +48,7 @@ const handleOtherArgs = (answer: string) => {
     commands[args[1]].value(rl, commands[args[1]].name + ' is a shell builtin\n')
   } else if (args[0] == 'type' && !commands[args[1]]) {
     //WARNING: !!!!
-    const p = process.env.PATH2 ?? ""
+    const p = process.env.PATH ?? ""
     const { realRoute, isInPath } = commandIsInPath(args[1], p)
     if (isInPath) {
       rl.write(`${args[1]} is ${realRoute}\n`)
