@@ -9,11 +9,15 @@ const rl = createInterface({
 const f = () => {
   rl.question("$ ", (answer: string) => {
     const args = answer.split(" ");
-
-    if (args[0] == 'exit' || args[1] == 'exit') {
-      handleExit(answer)
+    const execPath = returnPathOfFileInPath(args[0]);
+    if (execPath.length > 0 && args[0] != "echo") {
+      printInfo(execPath, args)
     } else {
-      handleOtherArgs(answer)
+      if (args[0] == 'exit' || args[1] == 'exit') {
+        handleExit(answer)
+      } else {
+        handleOtherArgs(answer)
+      }
     }
     f()
   })
@@ -21,6 +25,40 @@ const f = () => {
 
 f()
 
+const printInfo = (pathToFile: string, args: any) => {
+  fs.access(pathToFile, fs.constants.X_OK, (err) => {
+    if (err) {
+      rl.write(`File is not executable\n`)
+    } else {
+      console.log(`Program was passed ${args.length} args (including program name).`)
+      console.log(`Arg #0 (program name): ${args[0]}`)
+      if (args.length > 1) {
+        for (let i = 1; i < args.length; i++) {
+          console.log(`Arg #${i}: ${args[i]}`)
+        }
+      }
+      console.log(`Program Signature: ${Math.floor(Math.random() * (9000000000 - 1000000000 + 1)) + 1000000000 + args.length}`)
+    }
+    rl.prompt()
+  });
+}
+
+// const execute = (script: string) => {
+//
+//   const bash = spawn('bash', ['-c', script]);
+//   bash.stdout.on('data', (data) => {
+//     console.log(`stdout: ${data}`);
+//   });
+//
+//   bash.stderr.on('data', (data) => {
+//     console.error(`stderr: ${data}`);
+//   });
+//
+//   bash.on('close', (code) => {
+//     console.log(`child process exited with code ${code}`);
+//   });
+// }{
+//
 const commands: Command = {
   echo: {
     name: 'echo',
@@ -66,6 +104,25 @@ const handleExit = (answer: string) => {
   }
 }
 
+const returnPathOfFileInPath = (command: string) => {
+  let found = false;
+  const paths = process.env.PATH?.split(":");
+  let commandPath = "";
+  paths?.forEach((path) => {
+    try {
+      const cmds = fs.readdirSync(path).filter((cmd) => cmd === command);
+      if (cmds.length > 0) {
+        found = true;
+        cmds.forEach(() => {
+          commandPath = `${path}/${command}`
+        });
+      }
+    } catch (error: any) {
+    }
+  });
+  return commandPath
+}
+
 const commandIsInPath = (command: string) => {
   let found = false;
   const paths = process.env.PATH?.split(":");
@@ -89,7 +146,7 @@ const commandIsInPath = (command: string) => {
 type Command = {
   [key: string]: {
     name: string,
-    value?: any
+    value: any
     isBuiltin?: boolean
   }
 }
