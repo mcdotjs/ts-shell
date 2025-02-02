@@ -1,6 +1,6 @@
 import { ReadLine, createInterface } from "readline";
 import fs from 'fs'
-import { spawn, execSync } from "child_process";
+import { execSync } from "child_process";
 //🚀
 const rl = createInterface({
   input: process.stdin,
@@ -12,7 +12,6 @@ const f = () => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
     if (execPath.length > 0 && args[0] != "echo") {
-      //printInfo(execPath, args)
       const res = execSync(execPath)
       console.log(res.toString())
     } else {
