@@ -47,7 +47,15 @@ const commands: Command = {
       rl.write(answer)
     },
     isBuiltin: true
+  },
+  pwd: {
+    name: "pwd",
+    value: (rl: ReadLine, answer: string) => {
+      rl.write(answer)
+    },
+    isBuiltin: true
   }
+
 }
 
 const handleOtherArgs = (answer: string) => {
@@ -92,6 +100,9 @@ const returnPathOfFileInPath = (command: string) => {
   return commandPath
 }
 
+const returnCurrentPath = () => {
+  return process.cwd()
+}
 const commandIsInPath = (command: string) => {
   const path = returnPathOfFileInPath(command)
   if (path.length > 0) {
