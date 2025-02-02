@@ -12,9 +12,7 @@ const f = () => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
     if (execPath.length > 0 && args[0] != "echo") {
-      //NOTE: why calling on full path work localy?
-      //thus spanw could work
-      const res = execSync(args[0])
+      const res = execSync(answer)
       console.log(res.toString())
     } else {
       if (args[0] == 'exit' || args[1] == 'exit') {
@@ -95,21 +93,10 @@ const returnPathOfFileInPath = (command: string) => {
 }
 
 const commandIsInPath = (command: string) => {
-  let found = false;
-  const paths = process.env.PATH?.split(":");
-  paths?.forEach((path) => {
-    try {
-      const cmds = fs.readdirSync(path).filter((cmd) => cmd === command);
-      if (cmds.length > 0) {
-        found = true;
-        cmds.forEach(() => {
-          rl.write(`${command} is ${path}/${command}\n`);
-        });
-      }
-    } catch (error: any) {
-    }
-  });
-  if (!found) {
+  const path = returnPathOfFileInPath(command)
+  if (path.length > 0) {
+    rl.write(`${command} is ${path}\n`);
+  } else {
     rl.write(`${command}: not found\n`);
   }
 }
