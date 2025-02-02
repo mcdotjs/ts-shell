@@ -12,6 +12,7 @@ const f = () => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
     if (execPath.length > 0 && args[0] != "echo") {
+      //printInfo(execPath, args)
       execute(args[0])
     } else {
       if (args[0] == 'exit' || args[1] == 'exit') {
@@ -26,6 +27,23 @@ const f = () => {
 
 f()
 
+// const printInfo = (pathToFile: string, args: any) => {
+//   fs.access(pathToFile, fs.constants.X_OK, (err) => {
+//     if (err) {
+//       rl.write(`File is not executable\n`)
+//     } else {
+//       console.log(`Program was passed ${args.length} args (including program name).`)
+//       console.log(`Arg #0 (program name): ${args[0]}`)
+//       if (args.length > 1) {
+//         for (let i = 1; i < args.length; i++) {
+//           console.log(`Arg #${i}: ${args[i]}`)
+//         }
+//       }
+//       console.log(`Program Signature: ${Math.floor(Math.random() * (9000000000 - 1000000000 + 1)) + 1000000000 + args.length}`)
+//     }
+//     rl.prompt()
+//   });
+// }
 
 const execute = (script: string) => {
   const bash = spawn('bash', ['-c', script]);
