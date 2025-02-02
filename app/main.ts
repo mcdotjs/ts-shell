@@ -12,11 +12,10 @@ const f = () => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
     if (execPath.length > 0 && args[0] != "echo") {
-      //console.log("path",execPath)
-      try {
-        const res = execSync(execPath)
-        console.log(res.toString())
-      } catch (error) { }
+      //NOTE: why calling on full path work localy?
+      //thus spanw could work
+      const res = execSync(args[0])
+      console.log(res.toString())
     } else {
       if (args[0] == 'exit' || args[1] == 'exit') {
         handleExit(answer)
