@@ -11,7 +11,10 @@ const f = () => {
   rl.question("$ ", (answer: string) => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
-    if (execPath.length > 0 && args[0] != "echo") {
+    if (commands[args[0]]?.isBuiltin && commands[args[0]]?.exutable) {
+      (commands[args[0]].execute)()
+      rl.prompt()
+    } else if (execPath.length > 0 && !commands[args[0]]?.isBuiltin) {
       const res = execSync(answer)
       rl.write(res.toString())
     } else {
@@ -53,6 +56,11 @@ const commands: Command = {
     value: (rl: ReadLine, answer: string) => {
       rl.write(answer)
     },
+    execute: () => {
+      const v = returnCurrentPath();
+      rl.write(`${v}\n`)
+    },
+    exutable: true,
     isBuiltin: true
   }
 
@@ -117,5 +125,7 @@ type Command = {
     name: string,
     value: any
     isBuiltin?: boolean
+    execute?: any
+    exutable?: boolean
   }
 }
