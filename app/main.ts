@@ -13,7 +13,7 @@ const f = () => {
     const execPath = returnPathOfFileInPath(args[0]);
     if (execPath.length > 0 && args[0] != "echo") {
       const res = execSync(answer)
-      console.log(res.toString())
+      rl.write(res.toString())
     } else {
       if (args[0] == 'exit' || args[1] == 'exit') {
         handleExit(answer)
