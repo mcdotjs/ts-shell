@@ -12,6 +12,7 @@ const f = () => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
     if (execPath.length > 0 && args[0] != "echo") {
+      //console.log("path",execPath)
       try {
         const res = execSync(execPath)
         console.log(res.toString())
