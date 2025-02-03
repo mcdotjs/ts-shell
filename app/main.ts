@@ -12,7 +12,7 @@ const f = () => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
     if (commands[args[0]]?.isBuiltin && commands[args[0]]?.executable) {
-      (commands[args[0]].execute)()
+      (commands[args[0]].execute)(args)
       rl.prompt()
     } else if (execPath.length > 0 && !commands[args[0]]?.isBuiltin) {
       const res = execSync(answer)
@@ -62,8 +62,23 @@ const commands: Command = {
     },
     executable: true,
     isBuiltin: true
+  },
+  cd: {
+    name: "cd",
+    printValue: (rl: ReadLine, answer: string) => {
+      rl.write(answer)
+    },
+    execute: (args: string[] = []) => {
+      try {
+        process.chdir(args[1])
+      } catch (er) {
+        rl.write(`cd: ${args[1]}: No such file or directory\n`)
+        rl.prompt()
+      }
+    },
+    executable: true,
+    isBuiltin: true
   }
-
 }
 
 const handleOtherArgs = (answer: string) => {
