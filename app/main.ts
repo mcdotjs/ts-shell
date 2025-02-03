@@ -11,7 +11,7 @@ const f = () => {
   rl.question("$ ", (answer: string) => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
-    if (commands[args[0]]?.isBuiltin && commands[args[0]]?.exutable) {
+    if (commands[args[0]]?.isBuiltin && commands[args[0]]?.executable) {
       (commands[args[0]].execute)()
       rl.prompt()
     } else if (execPath.length > 0 && !commands[args[0]]?.isBuiltin) {
@@ -34,33 +34,33 @@ f()
 const commands: Command = {
   echo: {
     name: 'echo',
-    value: (rl: ReadLine, answer: string) => {
+    printValue: (rl: ReadLine, answer: string) => {
       rl.write(answer)
     },
     isBuiltin: true
   },
   exit: {
     name: "exit",
-    value: () => process.exit(),
+    printValue: () => process.exit(),
     isBuiltin: true
   },
   type: {
     name: "type",
-    value: (rl: ReadLine, answer: string) => {
+    printValue: (rl: ReadLine, answer: string) => {
       rl.write(answer)
     },
     isBuiltin: true
   },
   pwd: {
     name: "pwd",
-    value: (rl: ReadLine, answer: string) => {
+    printValue: (rl: ReadLine, answer: string) => {
       rl.write(answer)
     },
     execute: () => {
       const v = returnCurrentPath();
       rl.write(`${v}\n`)
     },
-    exutable: true,
+    executable: true,
     isBuiltin: true
   }
 
@@ -69,11 +69,11 @@ const commands: Command = {
 const handleOtherArgs = (answer: string) => {
   const args = answer.split(" ");
   if (args[0] == 'type' && commands[args[1]] && commands[args[1]].isBuiltin) {
-    commands[args[1]].value(rl, commands[args[1]].name + ' is a shell builtin\n')
+    commands[args[1]].printValue(rl, commands[args[1]].name + ' is a shell builtin\n')
   } else if (args[0] == 'type' && !commands[args[1]]) {
     commandIsInPath(args[1])
   } else if (commands[args[0]]) {
-    commands[args[0]].value(rl, answer.substring(5) + '\n')
+    commands[args[0]].printValue(rl, answer.substring(5) + '\n')
   } else {
     rl.write(`${answer}: command not found\n`)
   }
@@ -81,7 +81,7 @@ const handleOtherArgs = (answer: string) => {
 
 const handleExit = (answer: string) => {
   if (answer == 'exit 0') {
-    commands['exit'].value()
+    commands['exit'].printValue()
   } else if (answer == "type exit") {
     rl.write(`exit is a shell builtin\n`)
   } else if (answer == "echo exit") {
@@ -123,9 +123,9 @@ const commandIsInPath = (command: string) => {
 type Command = {
   [key: string]: {
     name: string,
-    value: any
+    printValue: any
     isBuiltin?: boolean
     execute?: any
-    exutable?: boolean
+    executable?: boolean
   }
 }
