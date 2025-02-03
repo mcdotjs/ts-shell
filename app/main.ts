@@ -69,7 +69,11 @@ const commands: Command = {
     },
     execute: (args: string[] = []) => {
       try {
-        process.chdir(args[1])
+        if (args[1] == "~") {
+          process.chdir(`${process.env?.HOME}`)
+        } else {
+          process.chdir(args[1])
+        }
       } catch (er) {
         rl.write(`cd: ${args[1]}: No such file or directory\n`)
         rl.prompt()
