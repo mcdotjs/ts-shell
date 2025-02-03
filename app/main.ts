@@ -30,7 +30,6 @@ const f = () => {
 
 f()
 
-
 const commands: Command = {
   echo: {
     name: 'echo',
