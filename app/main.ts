@@ -36,6 +36,16 @@ const commands: Command = {
     printValue: (rl: ReadLine, answer: string) => {
       rl.write(answer)
     },
+    execute: (args: string[] = []) => {
+      args.shift()
+      const joined = args.join().replaceAll(",", " ")
+      let j = joined
+      if (joined.startsWith("'")) {
+        j = joined.substring(1, joined.length - 1)
+      }
+      rl.write(`${j}\n`)
+    },
+    executable: true,
     isBuiltin: true
   },
   exit: {
@@ -90,8 +100,6 @@ const handleOtherArgs = (answer: string) => {
     commands[args[1]].printValue(rl, commands[args[1]].name + ' is a shell builtin\n')
   } else if (args[0] == 'type' && !commands[args[1]]) {
     commandIsInPath(args[1])
-  } else if (commands[args[0]]) {
-    commands[args[0]].printValue(rl, answer.substring(5) + '\n')
   } else {
     rl.write(`${answer}: command not found\n`)
   }
