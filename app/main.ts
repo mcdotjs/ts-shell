@@ -37,11 +37,17 @@ const commands: Command = {
       rl.write(answer)
     },
     execute: (args: string[] = []) => {
+      let temp = args
+      const a = temp.filter(i => i.length > 0)
+      a.shift()
+      const k = a.join(' ')
       args.shift()
-      const joined = args.join().replaceAll(",", " ")
+      const joined = args.join()
       let j = joined
-      if (joined.startsWith("'")) {
-        j = joined.substring(1, joined.length - 1)
+      if (joined.startsWith("'") && joined.endsWith("'")) {
+        j = joined.replaceAll(",", " ").substring(1, joined.length - 1)
+      } else {
+        j = k
       }
       rl.write(`${j}\n`)
     },
