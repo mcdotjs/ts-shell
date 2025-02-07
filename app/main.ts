@@ -45,7 +45,7 @@ const commands: Command = {
       const joined = args.join()
       let j = joined
       if (joined.startsWith("'") && joined.endsWith("'")) {
-        j = joined.replaceAll(",", " ").substring(1, joined.length - 1)
+        j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
       } else {
         j = k
       }
