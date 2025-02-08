@@ -37,19 +37,8 @@ const commands: Command = {
       rl.write(answer)
     },
     execute: (args: string[] = []) => {
-      let temp = args
-      const a = temp.filter(i => i.length > 0)
-      a.shift()
-      const k = a.join(' ')
-      args.shift()
-      const joined = args.join()
-      let j = joined
-      if (joined.startsWith("'") && joined.endsWith("'")) {
-        j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
-      } else {
-        j = k
-      }
-      rl.write(`${j}\n`)
+      const res = handleQuotes(args)
+      rl.write(`${res}\n`)
     },
     executable: true,
     isBuiltin: true
@@ -100,6 +89,28 @@ const commands: Command = {
   }
 }
 
+const handleQuotes = (args: string[]) => {
+  let temp = args
+  const a = temp.filter(i => i.length > 0)
+  a.shift()
+  const k = a.join(' ')
+  args.shift()
+  const joined = args.join()
+  let j = joined
+  if (joined.startsWith("'") && joined.endsWith("'")) {
+    j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
+  } else if (joined.startsWith('"') && joined.endsWith('"')) {
+    const doubleQuotesArr = joined.split('","')
+    let res = "" as string
+    doubleQuotesArr.map((i: any) => {
+      res += i.replaceAll(",", " ").replaceAll('"', " ").trim() + " "
+    })
+    j = res
+  } else {
+    j = k
+  }
+  return j
+}
 const handleOtherArgs = (answer: string) => {
   const args = answer.split(" ");
   if (args[0] == 'type' && commands[args[1]] && commands[args[1]].isBuiltin) {
