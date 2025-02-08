@@ -100,11 +100,31 @@ const handleQuotes = (args: string[]) => {
   if (joined.startsWith("'") && joined.endsWith("'")) {
     j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
   } else if (joined.startsWith('"') && joined.endsWith('"')) {
-    const doubleQuotesArr = joined.split('","')
-    // console.log(doubleQuotesArr)
-    let res = "" as string
-    doubleQuotesArr.map((i: any) => {
-      res += i.replaceAll(",", " ").replaceAll('"', "").trim()
+    let arr = []
+    let item = ""
+    let res = ""
+    for (const char of joined) {
+      if (char != '"') {
+        item += char
+      } else {
+        if (item.length > 0) {
+          arr.push(item)
+        }
+        item = ""
+      }
+    }
+    arr.map((i: any) => {
+      if (i.includes(",")) {
+        const checkIfJust = i.split("")
+        const v = checkIfJust.every((c: string) => c == ",")
+        if (v) {
+          res += " "
+        } else {
+          res += i.replaceAll(",", " ").replaceAll('"', "").trim()
+        }
+      } else {
+        res += i.replaceAll(",", " ").replaceAll('"', "").trim()
+      }
     })
     j = res
   } else {
