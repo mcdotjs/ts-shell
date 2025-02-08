@@ -101,7 +101,7 @@ const handleQuotes = (args: string[]) => {
     j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
   } else if (joined.startsWith('"') && joined.endsWith('"')) {
     const doubleQuotesArr = joined.split('","')
-    console.log(doubleQuotesArr)
+    // console.log(doubleQuotesArr)
     let res = "" as string
     doubleQuotesArr.map((i: any) => {
       res += i.replaceAll(",", " ").replaceAll('"', "").trim()
