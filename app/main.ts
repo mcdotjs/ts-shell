@@ -112,7 +112,6 @@ const handleQuotes = (args: string[]) => {
   let j = joined
   if (joined.startsWith("'") && joined.endsWith("'")) {
     j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
-    //j = handleSlashes(j).replaceAll(",", "")
   } else if (joined.startsWith('"') && joined.endsWith('"')) {
     let arr = []
     let item = ""
