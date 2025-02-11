@@ -89,6 +89,19 @@ const commands: Command = {
   }
 }
 
+const handleSlashes = (str: string) => {
+  const splited = str.split("")
+  for (const l in splited) {
+    if (splited[l] == '\\') {
+      let idx = (Number(l) + 1)
+      splited[l] = splited[idx]
+      splited[idx] = ''
+    }
+  }
+  const res = splited.join()
+  return res
+}
+
 const handleQuotes = (args: string[]) => {
   let temp = args
   const a = temp.filter(i => i.length > 0)
@@ -99,6 +112,7 @@ const handleQuotes = (args: string[]) => {
   let j = joined
   if (joined.startsWith("'") && joined.endsWith("'")) {
     j = joined.replaceAll(",", " ").substring(1, joined.length - 1).replaceAll("'", "")
+    //j = handleSlashes(j).replaceAll(",", "")
   } else if (joined.startsWith('"') && joined.endsWith('"')) {
     let arr = []
     let item = ""
@@ -130,8 +144,9 @@ const handleQuotes = (args: string[]) => {
   } else {
     j = k
   }
-  return j
+  return handleSlashes(j).replaceAll(",", "")
 }
+
 const handleOtherArgs = (answer: string) => {
   const args = answer.split(" ");
   if (args[0] == 'type' && commands[args[1]] && commands[args[1]].isBuiltin) {
