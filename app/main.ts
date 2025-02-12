@@ -195,7 +195,7 @@ const commandIsInPath = (command: string) => {
   // console.log(process.env.PATH)
   // console.log(process.execPath)
   if (path.length > 0) {
-    rl.write(`${command} is ${process.execPath}\n`);
+    rl.write(`${command} is ${path}\n`);
   } else {
     rl.write(`${command}: not found\n`);
   }
