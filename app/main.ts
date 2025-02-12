@@ -179,8 +179,6 @@ const returnPathOfFileInPath = (command: string, p: any = null) => {
         found = true;
         for (let i = 0; i >= cmds.length-1; i++) {
           commandPath = `${path}/${command}`
-
-          break
         };
       }
     } catch (error: any) {
