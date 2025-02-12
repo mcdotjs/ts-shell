@@ -167,11 +167,11 @@ const handleExit = (answer: string) => {
   }
 }
 
-const returnPathOfFileInPath = (command: string) => {
+const returnPathOfFileInPath = (command: string, p: any) => {
   let found = false;
-  const paths = process.env.PATH?.split(":");
+  const paths = p?.split(":") ?? process.env.PATH?.split(":");
   let commandPath = "";
-  paths?.forEach((path) => {
+  paths?.forEach((path: any) => {
     try {
       const cmds = fs.readdirSync(path).filter((cmd) => cmd === command);
       if (cmds.length > 0) {
@@ -190,9 +190,12 @@ const returnCurrentPath = () => {
   return process.cwd()
 }
 const commandIsInPath = (command: string) => {
-  const path = returnPathOfFileInPath(command)
+  const path = returnPathOfFileInPath(command, process.env.PATH)
+  // console.log('command is in path: ', path)
+  // console.log(process.env.PATH)
+  // console.log(process.execPath)
   if (path.length > 0) {
-    rl.write(`${command} is ${path}\n`);
+    rl.write(`${command} is ${process.execPath}\n`);
   } else {
     rl.write(`${command}: not found\n`);
   }
