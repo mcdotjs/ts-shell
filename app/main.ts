@@ -171,14 +171,17 @@ const returnPathOfFileInPath = (command: string, p: any = null) => {
   let found = false;
   const paths = p?.split(":") ?? process.env.PATH?.split(":");
   let commandPath = "";
+
   paths?.forEach((path: any) => {
     try {
       const cmds = fs.readdirSync(path).filter((cmd) => cmd === command);
       if (cmds.length > 0) {
         found = true;
-        cmds.forEach(() => {
+        for (let i = 0; i >= cmds.length-1; i++) {
           commandPath = `${path}/${command}`
-        });
+
+          break
+        };
       }
     } catch (error: any) {
     }
