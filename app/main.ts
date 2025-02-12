@@ -168,23 +168,19 @@ const handleExit = (answer: string) => {
 }
 
 const returnPathOfFileInPath = (command: string) => {
-  let found = false;
   const paths = process.env.PATH?.split(":");
-  let commandPath = "";
-  paths?.forEach((path) => {
+
+  for (const path of paths ?? []) {
     try {
-      const cmds = fs.readdirSync(path).filter((cmd) => cmd === command);
-      if (cmds.length > 0) {
-        found = true;
-        for (let i = 0; i < cmds.length; i++) {
-          commandPath = `${path}/${command}`
-        };
+      if (fs.existsSync(`${path}/${command}`)) {
+        return `${path}/${command}`;
       }
-    } catch (error: any) {
+    } catch (error) {
     }
-  });
-  return commandPath
-}
+  }
+
+  return "";
+};
 
 const returnCurrentPath = () => {
   return process.cwd()
