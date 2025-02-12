@@ -8,6 +8,7 @@ const rl = createInterface({
 });
 
 const f = () => {
+  console.log('path', process.env.PATH)
   rl.question("$ ", (answer: string) => {
     const args = answer.split(" ");
     const execPath = returnPathOfFileInPath(args[0]);
@@ -167,7 +168,7 @@ const handleExit = (answer: string) => {
   }
 }
 
-const returnPathOfFileInPath = (command: string, p: any) => {
+const returnPathOfFileInPath = (command: string, p: any = null) => {
   let found = false;
   const paths = p?.split(":") ?? process.env.PATH?.split(":");
   let commandPath = "";
