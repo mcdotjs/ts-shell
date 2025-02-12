@@ -192,7 +192,6 @@ const returnCurrentPath = () => {
 const commandIsInPath = (command: string) => {
   const path = returnPathOfFileInPath(command, process.env.PATH)
   // console.log('command is in path: ', path)
-  console.log(process.env.PATH)
   // console.log(process.execPath)
   if (path.length > 0) {
     rl.write(`${command} is ${path}\n`);
