@@ -14,7 +14,6 @@ const f = () => {
     if (commands[args[0]]?.isBuiltin && commands[args[0]]?.executable) {
       (commands[args[0]].execute)(args)
       rl.prompt()
-      //console.log('hhhhhh')
     } else if (execPath.length > 0 && !commands[args[0]]?.isBuiltin) {
       const res = execSync(answer)
       rl.write(res.toString())
@@ -92,11 +91,9 @@ const commands: Command = {
 
 const handleSlashes = (str: string) => {
   const splited = str.split("")
-  //console.log('logic herer', str)
   for (const l in splited) {
     if (splited[l] == '\\') {
       let idx = (Number(l) + 1)
-      //console.log(splited[l], splited[idx])
       splited[l] = splited[idx]
       splited[idx] = ''
     }
@@ -125,24 +122,16 @@ const handleQuotes = (args: string[]) => {
     let alreadyEscaped = false
     for (const char of joined) {
       count++
-      //console.log('char', char, joined)
       if (char == "\\") {
-        //console.log(' joined.indexOf(char)', count)
-        //jgf  let backSlashIndex = count
         let escaped = joined[count]
         if (escapedChars.includes(escaped) && !alreadyEscaped) {
-
-          //console.log('es', escaped)
           if (escaped == "\\") {
-
             item += escaped + "\\"
           } else {
-
             item += escaped
           }
           alreadyEscaped = true
         }
-        //console.log('backSlashIndex', backSlashIndex, escaped)
       } else if (char != '"') {
 
         alreadyEscaped = false
@@ -155,9 +144,7 @@ const handleQuotes = (args: string[]) => {
         item = ""
       }
     }
-    //   console.log('arr', arr)
     arr.map((i: any) => {
-      //console.log("iiiii", i)
       if (i.includes(",")) {
         const checkIfJust = i.split("")
         const v = checkIfJust.every((c: string) => c == ",")
@@ -167,7 +154,6 @@ const handleQuotes = (args: string[]) => {
           res += i.replaceAll(",", " ").trim()
         }
       } else {
-        //onsole.log("iiiii2222", i)
         res += i.replaceAll(",", " ").trim()
       }
     })
