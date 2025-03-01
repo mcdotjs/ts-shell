@@ -91,9 +91,11 @@ const commands: Command = {
 
 const handleSlashes = (str: string) => {
   const splited = str.split("")
+  //console.log('logic herer', str)
   for (const l in splited) {
     if (splited[l] == '\\') {
       let idx = (Number(l) + 1)
+      //console.log(splited[l], splited[idx])
       splited[l] = splited[idx]
       splited[idx] = ''
     }
@@ -116,8 +118,16 @@ const handleQuotes = (args: string[]) => {
     let arr = []
     let item = ""
     let res = ""
+
     for (const char of joined) {
-      if (char != '"') {
+      if (char == "\\") {
+        let backSlashIndex = joined.indexOf(char)
+        let escaped = joined[backSlashIndex + 1]
+        if (escaped == "\"" || escaped == "$" || escaped == "\\") {
+          item += escaped
+        }
+        //console.log('backSlashIndex', backSlashIndex, escaped)
+      } else if (char != '"') {
         item += char
       } else {
         if (item.length > 0) {
@@ -126,17 +136,20 @@ const handleQuotes = (args: string[]) => {
         item = ""
       }
     }
+ //   console.log('arr', arr)
     arr.map((i: any) => {
+   //   console.log("iiiii", i)
       if (i.includes(",")) {
         const checkIfJust = i.split("")
         const v = checkIfJust.every((c: string) => c == ",")
         if (v) {
           res += " "
         } else {
-          res += i.replaceAll(",", " ").replaceAll('"', "").trim()
+          res += i.replaceAll(",", " ").trim()
         }
       } else {
-        res += i.replaceAll(",", " ").replaceAll('"', "").trim()
+     //   console.log("iiiii2222", i)
+        res += i.replaceAll(",", " ").trim()
       }
     })
     j = res
